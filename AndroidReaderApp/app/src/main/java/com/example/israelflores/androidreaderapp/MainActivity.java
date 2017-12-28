@@ -240,7 +240,10 @@ public class MainActivity extends AppCompatActivity {
                             Feature labelDetection = new Feature();
                             labelDetection.setType("LABEL_DETECTION");
                             labelDetection.setMaxResults(10);
+                            Feature textDetection = new Feature();
+                            labelDetection.setType("DOCUMENT_TEXT_DETECTION");
                             add(labelDetection);
+                            add(textDetection);
                         }});
 
                         // Add the list of one thing to the request
@@ -283,7 +286,16 @@ public class MainActivity extends AppCompatActivity {
         } else {
             message += "nothing";
         }
-
+        message += "\n\nI found these text:\n\n";
+        List<EntityAnnotation> texts = response.getResponses().get(0).getTextAnnotations();
+        if (texts != null){
+            for (EntityAnnotation text : texts){
+                message += String.format(Locale.US,"%.3f: %s", text.getScore(),text.getDescription());
+                message += "\n";
+            }
+        }else{
+            message += "nothing";
+        }
         return message;
     }
 }
